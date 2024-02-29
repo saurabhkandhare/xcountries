@@ -1,23 +1,75 @@
-import logo from './logo.svg';
-import './App.css';
+// import logo from './logo.svg';
+// import './App.css';
+
+// function App() {
+//   return (
+//     <div className="App">
+//       <header className="App-header">
+//         <img src={logo} className="App-logo" alt="logo" />
+//         <p>
+//           Edit <code>src/App.js</code> and save to reload.
+//         </p>
+//         <a
+//           className="App-link"
+//           href="https://reactjs.org"
+//           target="_blank"
+//           rel="noopener noreferrer"
+//         >
+//           Learn React
+//         </a>
+//       </header>
+//     </div>
+//   );
+// }
+
+// export default App;
+
+import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    fetch("https://restcountries.com/v3.1/all")
+      .then((response) => response.json())
+      .then((data) => setCountries(data))
+      .catch((error) => console.error("Error fetching data: ", error));
+  }, []);
+
+  const cardStyle = {
+    width: "200px",
+    border: "1px solid #ccc",
+    borderRadius: "10px",
+    margin: "10px",
+    padding: "10px",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  };
+
+  const containerStyle = {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100vh",
+  };
+
+  const imageStyle = {
+    width: "100px",
+    height: "100px",
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={containerStyle}>
+      {countries.map((country) => (
+        <div key={country.cca3} style={cardStyle}>
+          <img src={country.flags.png} alt={`Flag of ${country.name.common}`} style={imageStyle} />
+          <h2>{country.name.common}</h2>
+        </div>
+      ))}
     </div>
   );
 }
